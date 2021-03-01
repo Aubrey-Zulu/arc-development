@@ -13,7 +13,7 @@ const useMenu = () => {
     setAnchorEl(null);
     setOpen(false);
   };
-  return { open, anchorEl, handleClick, handleClose };
+  return { open, anchorEl, handleClick, handleClose, setAnchorEl, setOpen };
 };
 
 export default useMenu;

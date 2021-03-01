@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
 import { useMenu } from '../hooks';
+import setActivePage from '../../util/setActivePage';
 
 const ElevationScroll = (props) => {
   const { children, window } = props;
@@ -56,33 +57,52 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'transparent',
     },
   },
+  menu: {
+    backgroundColor: theme.palette.common.blue,
+    color: 'white',
+    borderRadius: '0px',
+  },
+  menuItem: {
+    ...theme.typography.tab,
+    opacity: 0.7,
+    '&:hover': { opacity: 1 },
+  },
 }));
+const menuOptions = [
+  { name: 'Services', link: '/services' },
+  {
+    name: 'Custom software development',
+    link: '/custom-software',
+  },
+  { name: 'Mobile app development', link: '/mobile-apps' },
+  { name: 'Website development', link: '/websites' },
+];
 
 const Header = () => {
   const classes = useStyles();
   const { pathname } = useLocation();
-  const { open, anchorEl, handleClick, handleClose } = useMenu();
+  const {
+    open,
+    anchorEl,
+    handleClick,
+    handleClose,
+    setAnchorEl,
+    setOpen,
+  } = useMenu();
   const [value, setValue] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
+  const handleMenuItemClick = (event, index) => {
+    setAnchorEl(null);
+    setOpen(false);
+    setSelectedIndex(index);
+  };
   const handleChange = (event, value) => {
     setValue(value);
   };
 
-  // persist navigation Url after reload
   useEffect(() => {
-    if (pathname === '/' && value !== 0) {
-      setValue(0);
-    } else if (pathname === '/services' && value !== 1) {
-      setValue(1);
-    } else if (pathname === '/revolution' && value !== 2) {
-      setValue(2);
-    } else if (pathname === '/about' && value !== 3) {
-      setValue(3);
-    } else if (pathname === '/contact' && value !== 4) {
-      setValue(4);
-    } else if (pathname === '/estimate' && value !== 5) {
-      setValue(5);
-    }
+    setActivePage(pathname, value, setValue, setSelectedIndex);
   }, [pathname]);
 
   return (
@@ -148,51 +168,29 @@ const Header = () => {
             </Button>
             <Menu
               id="simple-menu"
+              classes={{ paper: classes.menu }}
               anchorEl={anchorEl}
               open={open}
+              elevation={0}
               onClose={handleClose}
               MenuListProps={{ onMouseLeave: handleClose }}
             >
-              <MenuItem
-                component={Link}
-                to="/services"
-                onClick={() => {
-                  handleClose();
-                  setValue(1);
-                }}
-              >
-                Services
-              </MenuItem>
-              <MenuItem
-                component={Link}
-                to="/custom-software"
-                onClick={() => {
-                  handleClose();
-                  setValue(1);
-                }}
-              >
-                Custom Development
-              </MenuItem>
-              <MenuItem
-                component={Link}
-                to="/mobile-apps"
-                onClick={() => {
-                  handleClose();
-                  setValue(1);
-                }}
-              >
-                Mobile App Development
-              </MenuItem>
-              <MenuItem
-                component={Link}
-                to="/websites"
-                onClick={() => {
-                  handleClose();
-                  setValue(1);
-                }}
-              >
-                Website Development
-              </MenuItem>
+              {menuOptions.map((option, index) => (
+                <MenuItem
+                  key={option}
+                  component={Link}
+                  to={option.link}
+                  selected={index === selectedIndex && value === 1}
+                  onClick={(event) => {
+                    setValue(1);
+                    handleMenuItemClick(event, index);
+                    handleClose();
+                  }}
+                  classes={{ root: classes.menuItem }}
+                >
+                  {option.name}
+                </MenuItem>
+              ))}
             </Menu>
           </Toolbar>
         </AppBar>
