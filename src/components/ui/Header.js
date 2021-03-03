@@ -218,7 +218,7 @@ const Header = () => {
       <IconButton
         className={classes.drawerContainer}
         color="inherit"
-        disableRipple
+        disableRippleg
         onClick={() => setOpenDrawer(!openDrawer)}
       >
         <MenuIcon />
