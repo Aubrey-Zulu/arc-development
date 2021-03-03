@@ -2,18 +2,25 @@ import { useState } from 'react';
 
 const useMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setOpen(true);
+    setOpenMenu(true);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    setOpen(false);
+    setOpenMenu(false);
   };
-  return { open, anchorEl, handleClick, handleClose, setAnchorEl, setOpen };
+  return {
+    openMenu,
+    anchorEl,
+    handleClick,
+    handleClose,
+    setAnchorEl,
+    setOpenMenu,
+  };
 };
 
 export default useMenu;
