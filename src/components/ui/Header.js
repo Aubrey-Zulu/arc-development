@@ -97,6 +97,9 @@ const useStyles = makeStyles((theme) => ({
   drawerItemEstimate: {
     backgroundColor: theme.palette.common.orange,
   },
+  appBar: {
+    zIndex: theme.zIndex.modal + 1,
+  },
 }));
 const menuOptions = [
   { name: 'Services', link: '/services' },
@@ -149,6 +152,7 @@ const Header = () => {
         disableBackdropTransition={!iOS}
         disableDiscovery={iOS}
       >
+        <div className={classes.toolBarMargin} />
         <List disablePadding>
           <ListItem
             onClick={() => {
@@ -370,7 +374,7 @@ const Header = () => {
   return (
     <>
       <ElevationScroll>
-        <AppBar>
+        <AppBar className={classes.appBar}>
           <Toolbar disableGutters>
             <Button
               disableRipple
